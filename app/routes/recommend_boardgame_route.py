@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from flask import Flask, request 
 
 def manage_route(app):
   @app.get("/test/numpy")
@@ -32,4 +33,15 @@ def manage_route(app):
       'message': 200,
       'statusCode': 'ok',
       'data': 'test3'
+    }
+  
+  @app.post("/boardgames-recommend")
+  def test4():
+    j = request.get_json()
+    print(j)
+
+    return {
+      'message': 200,
+      'statusCode': 'ok',
+      'data': 'test4'
     }
