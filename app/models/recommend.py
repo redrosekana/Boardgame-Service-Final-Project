@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import os
 
-
 def create_user_profile(dict_rating, df_sim):
     df = pd.DataFrame(index=[0], columns=df_sim.columns)
     for key, value in dict_rating.items():
@@ -12,7 +11,6 @@ def create_user_profile(dict_rating, df_sim):
     df.rename(columns={0: "rating"}, inplace=True)
 
     return df
-
 
 def recommend_games(df_new_user, df_sim):
     # Convert df_similarity and df_new_user to numpy arrays
@@ -45,7 +43,7 @@ def recommend_games(df_new_user, df_sim):
     return top_recommendations
 
 
-def get_top_recommendations(dict_rating, df_sim, num_recommendations=10):
+def get_top_recommendations(dict_rating, df_sim):
     df = pd.DataFrame(list(dict_rating.items()), columns=["name", "rating"])
     mean_value = df["rating"].mean()
 
@@ -62,7 +60,7 @@ def get_top_recommendations(dict_rating, df_sim, num_recommendations=10):
     df_recommeds = recommend_games(df_new_user, df_sim)
     rec_games = df_recommeds.loc[
         df_new_user[df_new_user.values == 0].index
-    ].sort_values(by="score", ascending=False)[:num_recommendations]
+    ].sort_values(by="score", ascending=False)
 
     return rec_games
 
@@ -71,25 +69,5 @@ df_sim = pd.read_csv(os.path.abspath(os.path.join("static", "boardgames_sim.csv"
 df_sim = df_sim.set_index("name")
 
 
-# dict_rating = {
-#     "Through the Ages: A New Story of Civilization": 10,
-#     "7 Wonders Duel": 9,
-#     "Codenames": 8,
-#     "Scythe": 8,
-#     "Gizmos": 7.5,
-#     "Splendor": 7,
-#     "Black Stories": 6.5,
-#     "Dixit": 6,
-#     "One Night Ultimate Werewolf": 2,
-#     "Ultimate Werewolf: Deluxe Edition": 1,
-#     "Ultimate Werewolf": 1,
-# }
-
-# a = get_top_recommendations(dict_rating, df_sim, num_recommendations=10)
-# print(a)
-# rec_games = get_top_recommendations(dict_rating, df_sim, num_recommendations=10)
-# print(rec_games)
-
-
 def service_recommend(body):
-    return get_top_recommendations(body, df_sim, num_recommendations=10)
+    return get_top_recommendations(body, df_sim)
